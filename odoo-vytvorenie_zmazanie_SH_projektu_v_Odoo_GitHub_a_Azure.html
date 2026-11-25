@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odoo.sh Postup - Checklist</title>
+    <style>
+        :root {
+            --primary-color: #714B67; /* Odoo fialová */
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .progress-container {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px 0;
+            z-index: 100;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .main-task {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            background: #fafafa;
+        }
+
+        .main-task > label {
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .sub-tasks {
+            list-style: none;
+            padding-left: 30px;
+            margin-top: 10px;
+        }
+
+        .sub-tasks li {
+            margin-bottom: 8px;
+        }
+
+        .sub-tasks label {
+            display: flex;
+            align-items: flex-start;
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 6px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #d63384;
+            word-break: break-all;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .btn-reset {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-reset:hover {
+            background-color: #c82333;
+        }
+
+        .note {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Postup nastavenia Odoo.sh projektu</h1>
+
+    <div class="progress-container">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span>Celkový progres:</span>
+            <span id="progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <div id="checklist">
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 1. Na Odoo.sh v My Projects vytvoriť nový projekt s názvom (napr. jku-demo2) so Subscription Code.</label>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 2. Nastavenie Submodules na Odoo.sh</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> V Setting nového projektu skrolovať dole do časti Submodules.</label></li>
+                <li>
+                    <label>
+                        <input type="checkbox" class="task-check"> 
+                        Skopírovať cestu: <code id="gitPath">git@ssh.dev.azure.com:v3/dodosys/DodoSystems/Customers-JozefKubus</code>
+                        <button type="button" onclick="copyToClipboard(this)" style="margin-left: 10px; cursor: pointer; padding: 2px 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px; background: #f8f9fa;">
+                            📋 Kopírovať
+                        </button>
+                    </label>
+                </li>
+                <a href="https://dev.azure.com/dodosys/DodoSystems/_wiki/wikis/Dodo-Systems.wiki/959/zalozenie-noveho-(submodules)-SH-projektu" target="_blank">Otvoriť dokumentáciu pre SubModules</a>
+            </ul>
+        </div>         
+
+        <div class="main-task">
+			<label><input type="checkbox" class="task-check"> 3. Po stlačení sa vygeneruje Public Key, ten skopírovať.</label>
+			<div class="sub-tasks" style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+				<label style="flex-grow: 1; display: flex; align-items: center; gap: 10px; width: 100%;">
+					<input type="text" placeholder="Sem vlož vygenerovaný Public Key..." style="flex-grow: 1; padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 13px;">
+					<button type="button" onclick="copyToClipboard(this)" style="cursor: pointer; padding: 6px 12px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px; background: #f8f9fa; white-space: nowrap;">
+						📋 Kopírovať
+					</button>
+				</label>
+			</div>
+		</div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 4. Azure DevOps - Pridanie SSH kľúča (dev.azure.com/dodosys/_userSettings/key)</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Otvoriť User settings (ozubené koliesko vpravo hore).</label></li>
+                <li><label><input type="checkbox" class="task-check"> Sekcia Security -> SSH public keys -> New Key.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Vložiť Public Key z Odoo.sh.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Vložiť názov projektu (napr. jozefkubus-jku-demo2).</label></li>
+                <li><label><input type="checkbox" class="task-check"> Uložiť a zavrieť okno.</label></li>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 5. GitHub Secrets (Odoo.sh -> Builds -> GitHub tlačidlo na main)</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Otvoriť Settings na GitHub repozitári.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Security -> Secrets and variables -> Actions -> New repository secret.</label></li>
+                <li>
+                    <label>
+                        <input type="checkbox" class="task-check"> Name: <code>AZURE_PAT</code>
+                        <button type="button" onclick="copyToClipboard(this)" style="margin-left: 10px; cursor: pointer; padding: 2px 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px; background: #f8f9fa;">
+                            📋 Kopírovať
+                        </button>
+                    </label>
+                </li>
+                <li><label><input type="checkbox" class="task-check"> Secret: Vložiť môj Azure Token (vygenerovaný v Azure: User settings, Security, Personal access tokens).</label></li>
+                <a href="https://dev.azure.com/dodosys/_usersSettings/tokens" target="_blank">Otvoriť Azure tokeny</a>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 6. GitHub Workflow vytvorenie</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Záložka "&lt;&gt; Code" -> Add file -> Create new file.</label></li>
+                <li>
+                    <label>
+                        <input type="checkbox" class="task-check"> Názov: <code>.github/workflows/azure-branch-sync-caller.yml</code>
+                        <button type="button" onclick="copyToClipboard(this)" style="margin-left: 10px; cursor: pointer; padding: 2px 8px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px; background: #f8f9fa;">
+                            📋 Kopírovať
+                        </button>
+                    </label>
+                </li>
+                <li><label><input type="checkbox" class="task-check">Obsah: Vložiť celý 25 riadkový príkaz z dokumentácie.</label></li>
+                <a href="https://dev.azure.com/dodosys/DodoSystems/_wiki/wikis/Dodo-Systems.wiki/959/zalozenie-noveho-(submodules)-SH-projektu" target="_blank">Otvoriť dokumentáciu pre SubModules</a>
+                <li><label><input type="checkbox" class="task-check"> Kliknúť na Commit changes...</label></li>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 7. Spustenie synchronizácie</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> GitHub -> záložka Actions -> Sync branches to Azure DevOps.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Tlačidlo Run workflow -> Run workflow.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Počkať na dokončenie synchronizácie (main).</label></li>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 8. Odoo.sh Builds a Testy</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Sledovať priebeh buildu v záložke Builds.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Nastavenie Unit testov: Settings -> Development Branches -> Test suite -> prepnúť na: Custom test filtering.</label></li>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 9. Vytvorenie databáz (Odoo.SH - Branches)</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Production: Vytvoriť novú databázu cez + (Fork: main, To: Demo2).</label></li>
+                <li><label><input type="checkbox" class="task-check"> Staging: Vytvoriť databázu (napr. staging_demo2).</label></li>
+                <li><label><input type="checkbox" class="task-check"> Dev: ak chcem spustiť unit testy iba na konkrétnom module, vytvoriť do Dev forkom z Produkcie ešte pred Pushom modulov, napr. DEV_default_company_price, kde pushnem iba vybrané moduly Unit testy sa spsutia iba na DEV prostredí.</label></li>
+                <li class="note">Pravidlá: Dev (main, dev, development), Staging (staging_*), Production (iné názvy).</li>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 10. Push modulov (Dodo Apps)</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Interné Odoo -> Dodo Apps -> Tools -> SH Project Management.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Vybrať personal Repozitár.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Reload Project content.</label></li>
+                <li><label><input type="checkbox" class="task-check"> !!! Na main sa nepushuje.</label></li>
+                <li><label><input type="checkbox" class="task-check"> !!! Ale na inú DB v časti DEV sa môže pushovať (pre unit testy konkrétnych modulov)</label></li>
+                <li><label><input type="checkbox" class="task-check"> Vybrať Staging/Production a SH Push.</label></li>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 11. Konfigurácia po pushnutí</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Pripojiť sa k buildu a zapnúť Debug Mode.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Kliknúť Update apps list (filtrovať "dodo").</label></li>
+                <li><label><input type="checkbox" class="task-check"> 1. Po založení branchu NIČ neinštalovať ani nenastavovať.</label></li>
+                <li><label><input type="checkbox" class="task-check"> 2. Pushnúť l10n_sk_dds/l10n_cz_dds a ostatné moduly.</label></li>
+                <li><label><input type="checkbox" class="task-check"> 3. Nainštalovať SK/CZ jazyk (pre preklady).</label></li>
+                <li><label><input type="checkbox" class="task-check"> 4. Nainštalovať najskôr l10n_sk_dds / l10n_cz_dds.</label></li>
+                <li><label><input type="checkbox" class="task-check"> 5. Doinštalovať zvyšné dds/third party moduly.</label></li>
+                <li><label><input type="checkbox" class="task-check"> 6. Začať s celkovou konfiguráciou Odoo.</label></li>
+            </ul>
+        </div>
+
+        <div class="main-task">
+            <label><input type="checkbox" class="task-check"> 12. Mazanie projektu (Clean up)</label>
+            <ul class="sub-tasks">
+                <li><label><input type="checkbox" class="task-check"> Odoo.sh - open Project, ktorý chcem zmazať.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Presunúť branche do Dev a vymazať (okrem main).</label></li>
+                <li><label><input type="checkbox" class="task-check"> prepnúť sa do Builds, tlačidlo GitHub z mainu: Settings -> Danger Zone -> Delete this Repository. Potvrdiť heslom do GitHubu.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Odoo.sh: Projects -> tlačidlo: 3 bodky -> Settings -> scrolovať dole -> Delete Project.</label></li>
+                <label>Teraz máme vyčistené Odoo.SH aj GitHub</label>
+                <li><label><input type="checkbox" class="task-check"> Azure: Customer Branches -> Customers-JozefKubus -> Zmazať branche.</label></li>
+                <a href="https://dev.azure.com/dodosys/DodoSystems/_git/Customers-JozefKubus/branches" target="_blank">Otvoriť môj Azure s Branches</a>
+                <li><label><input type="checkbox" class="task-check"> Azure: Zmazať main ako PREDPOSLEDNÝ cez 3 bodky a Delete Branch.</label></li>
+                <li><label><input type="checkbox" class="task-check"> Azure: vpravo cez ozubené koliesko, SSH public keys, vpravo 3 bodky, Remove SSH Key.</label></li>
+            </ul>
+        </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetProgress()">Resetovať progres</button>
+</div>
+
+<script>
+    const checkboxes = document.querySelectorAll('.task-check');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+
+    // Load saved state
+    window.onload = () => {
+        const savedData = JSON.parse(localStorage.getItem('odoo_checklist_progress') || '{}');
+        checkboxes.forEach((cb, index) => {
+            if (savedData[index]) {
+                cb.checked = true;
+                cb.closest('label').classList.add('completed');
+            }
+            
+            cb.addEventListener('change', () => {
+                updateState(cb, index);
+                calculateProgress();
+            });
+        });
+        calculateProgress();
+    };
+
+    function updateState(cb, index) {
+        const savedData = JSON.parse(localStorage.getItem('odoo_checklist_progress') || '{}');
+        if (cb.checked) {
+            cb.closest('label').classList.add('completed');
+            savedData[index] = true;
+        } else {
+            cb.closest('label').classList.remove('completed');
+            delete savedData[index];
+        }
+        localStorage.setItem('odoo_checklist_progress', JSON.stringify(savedData));
+    }
+
+    function calculateProgress() {
+        const total = checkboxes.length;
+        const checked = document.querySelectorAll('.task-check:checked').length;
+        const percentage = Math.round((checked / total) * 100);
+        
+        progressFill.style.width = percentage + '%';
+        progressText.innerText = percentage + '%';
+    }
+
+    function resetProgress() {
+        if (confirm('Naozaj chcete vymazať celý progres?')) {
+            localStorage.removeItem('odoo_checklist_progress');
+            location.reload();
+        }
+    }
+    
+    function copyToClipboard(btn) {
+    // Nájdeme spoločný obal (label)
+    const container = btn.closest('label');
+    
+    // Skúsime najprv nájsť input (ak kopírujeme z neho)
+    const inputElement = container.querySelector('input[type="text"]');
+    // Ak input nie je, skúsime nájsť code element
+    const codeElement = container.querySelector('code');
+    
+    let textToCopy = "";
+    
+    if (inputElement) {
+        textToCopy = inputElement.value.trim();
+    } else if (codeElement) {
+        textToCopy = codeElement.innerText.trim();
+    }
+    
+    if (!textToCopy) {
+        alert('Nič na skopírovanie! Najprv vlož Public Key do textového poľa.');
+        return;
+    }
+
+    // Použijeme Clipboard API
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "✅ Skopírované!";
+        btn.style.backgroundColor = "#d4edda";
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.backgroundColor = "#f8f9fa";
+        }, 2000);
+    }).catch(err => {
+        console.error('Chyba pri kopírovaní: ', err);
+    });
+}
+</script>
+
+</body>
+</html>
